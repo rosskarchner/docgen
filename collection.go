@@ -110,17 +110,18 @@ func (r *Root) Open(rdr io.Reader) error {
 
 // Build build UnCategorized collection
 func (r *Root) build() {
-	c := Collection{}
-	c.Name = "Default"
-	for i := len(r.Collections) - 1; i >= 0; i-- {
-		if len(r.Collections[i].Items) <= 0 {
-			c.Items = append(c.Items, Item{
-				Name:      r.Collections[i].Name,
-				Request:   r.Collections[i].Request,
-				Responses: r.Collections[i].Responses,
+	new_c := Collection{}
+	new_c.Name = "Default"
+	for _, collection:= range r.Collections {
+		if len(collection.Items) <= 0 {
+			new_c.Items = append(new_c.Items, Item{
+				Name:      collection.Name,
+				Request:   collection.Request,
+				Responses: collection.Responses,
 			})
-			r.Collections = append(r.Collections[:i], r.Collections[i+1:]...)
 		}
 	}
-	r.Collections = append(r.Collections, c)
+	replacement_collections := []Collection{}
+	replacement_collections = append(replacement_collections, new_c)
+	r.Collections = replacement_collections
 }
